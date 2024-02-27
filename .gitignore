@@ -1,0 +1,35 @@
+# Pliki tymczasowe
+node_modules/
+
+# Pliki konfiguracyjne
+.env
+
+# Pliki związane z systemem operacyjnym
+.DS_Store
+Thumbs.db
+
+# Logi i pliki związane z debugowaniem
+logs/
+*.log
+npm-debug.log*
+
+# Katalogi, w których przechowywane są dane tymczasowe
+/tmp/
+/build/
+
+# Pliki wygenerowane podczas budowania
+dist/
+out/
+build/
+
+# Plik lock do Yarn
+yarn.lock
+
+# Pliki VS Code
+.vscode/
+
+# Pliki konfiguracyjne
+*.config.js
+
+# Katalogi IDE
+.idea/
