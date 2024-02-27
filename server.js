@@ -1,6 +1,8 @@
 import express from 'express';
+import bodyParser from 'body-parser';
 
 const app = express();
+app.use(bodyParser.json());
 
 const shoppingList = [
   {
@@ -22,8 +24,8 @@ const shoppingList = [
     ],
   },
 ];
-app.get('/shopping-list', (req, res) => {
+app.get('/api/shopping-list', (req, res) => {
   res.json(shoppingList);
 });
-
-app.listen(3000, () => console.log('server on'));
+const port = process.env.PORT;
+app.listen(port, () => console.log('server on'));
