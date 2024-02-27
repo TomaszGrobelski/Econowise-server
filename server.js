@@ -27,5 +27,5 @@ const shoppingList = [
 app.get('/api/shopping-list', (req, res) => {
   res.json(shoppingList);
 });
-const port = process.env.PORT;
-app.listen(port, () => console.log('server on'));
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log('server on'));
