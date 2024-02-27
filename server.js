@@ -24,7 +24,7 @@ const shoppingList = [
     ],
   },
 ];
-app.get('/api/shopping-list', (req, res) => {
+app.get('/shopping-list', (req, res) => {
   res.json(shoppingList);
 });
 const PORT = process.env.PORT || 3000;
