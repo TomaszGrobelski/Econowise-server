@@ -1,7 +1,9 @@
 import express from 'express';
 import bodyParser from 'body-parser';
+import cors from 'cors';
 
 const app = express();
+app.use(cors());
 app.use(bodyParser.json());
 
 const shoppingList = [
@@ -24,6 +26,10 @@ const shoppingList = [
     ],
   },
 ];
+app.get('/', (req, res) => {
+  res.json(shoppingList);
+});
+
 app.get('/shopping-list', (req, res) => {
   res.json(shoppingList);
 });
