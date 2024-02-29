@@ -63,14 +63,16 @@ db.connect(err => {
     ];
 
     const insertQuery = `
-      INSERT INTO shopping_lists (name, item_name, quantity)
-      VALUES
-      ${shoppingList
-        .flatMap(list =>
-          list.items.map(item => `("${list.name}", "${item.name}", ${item.quantity})`)
+    INSERT INTO shopping_lists (name, category, item_name, quantity)
+    VALUES
+    ${shoppingList
+      .flatMap(list =>
+        list.items.map(
+          item => `("${list.name}", "${list.category}", "${item.name}", ${item.quantity})`
         )
-        .join(', ')}
-    `;
+      )
+      .join(', ')}
+  `;
 
     db.query(insertQuery, insertErr => {
       if (insertErr) {
