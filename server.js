@@ -94,5 +94,10 @@ app.get('/shopping-list', (req, res) => {
   });
 });
 
+app.get('/mysql-user', (req, res) => {
+  const mysqlUser = process.env.MYSQL_USER;
+  res.json({ mysqlUser });
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log('Server running on port', PORT));
