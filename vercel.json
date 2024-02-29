@@ -12,7 +12,7 @@
       "dest": "/server.js"
     },
     {
-      "src": "/shopping-list",
+      "src": "/shopping",
       "dest": "/server.js"
     }
   ]

@@ -17,7 +17,7 @@ const db = mysql.createConnection({
   database: process.env.MYSQL_DB_NAME,
 });
 
-db.connect((err) => {
+db.connect(err => {
   if (err) {
     console.log(err.message);
     return;
@@ -25,24 +25,24 @@ db.connect((err) => {
   console.log('Database connected');
 
   const createTableQuery = `
-    CREATE TABLE IF NOT EXISTS shopping_lists (
+    CREATE TABLE IF NOT EXISTS shoppings (
       id INT AUTO_INCREMENT PRIMARY KEY,
       name VARCHAR(255) NOT NULL,
       category VARCHAR(255) NOT NULL,
       items JSON NOT NULL
     )`;
 
-  db.query(createTableQuery, (createTableErr) => {
+  db.query(createTableQuery, createTableErr => {
     if (createTableErr) {
       console.log(createTableErr.message);
       return;
     }
-    console.log('shopping_lists table created or already exists');
+    console.log('shopping lists table created or already exists');
   });
 });
 
-app.get('/shopping-list', (req, res) => {
-  const selectQuery = 'SELECT * FROM shopping_lists';
+app.get('/shopping', (req, res) => {
+  const selectQuery = 'SELECT * FROM shoppings';
   db.query(selectQuery, (selectErr, results) => {
     if (selectErr) {
       console.log(selectErr.message);
@@ -53,42 +53,62 @@ app.get('/shopping-list', (req, res) => {
   });
 });
 
-app.post('/shopping-list', (req, res) => {
+app.post('/shopping', (req, res) => {
   const { name, category, items } = req.body;
 
-  // Assuming you have a 'shopping_lists' table with columns: id, name, category, items (JSON)
-
-  const insertQuery = 'INSERT INTO shopping_lists (name, category, items) VALUES (?, ?, ?)';
+  const insertQuery = 'INSERT INTO shoppings (name, category, items) VALUES (?, ?, ?)';
 
   db.query(insertQuery, [name, category, JSON.stringify(items)], (insertErr, results) => {
     if (insertErr) {
       console.log(insertErr.message);
-      res.status(500).json({ error: 'Internal Server Error' });
-      return;
+      return res.status(500).json({ error: 'Internal Server Error' });
     }
 
     res.json({ message: 'Shopping list added successfully', id: results.insertId });
   });
 });
 
-app.delete('/shopping-list/clear-all', (req, res) => {
-  const deleteQuery = 'DELETE FROM shopping_lists';
+app.delete('/shopping/clear/:id', (req, res) => {
+  const { id } = req.params;
+  const deleteQuery = 'DELETE FROM shoppings WHERE id = ?';
 
-  db.query(deleteQuery, (deleteErr) => {
+  db.query(deleteQuery, [id], deleteErr => {
     if (deleteErr) {
       console.log(deleteErr.message);
       res.status(500).json({ error: 'Internal Server Error' });
       return;
     }
 
-    res.json({ message: 'All shopping lists cleared successfully' });
+    res.json({ message: `Shopping list with ID ${id} deleted successfully` });
   });
 });
 
-app.get('/', (req,res)=>{
+app.get('/shopping/create', (req, res) => {
+  const newList = {
+    name: 'Nowa lista',
+    category: 'Inna kategoria',
+    items: [],
+  };
 
-  res.json("Czesc")
-})
+  const insertQuery = 'INSERT INTO shoppings (name, category, items) VALUES (?, ?, ?)';
+
+  db.query(
+    insertQuery,
+    [newList.name, newList.category, JSON.stringify(newList.items)],
+    (insertErr, results) => {
+      if (insertErr) {
+        console.log(insertErr.message);
+        return res.status(500).json({ error: 'Internal Server Error' });
+      }
+
+      res.json({ message: 'New shopping list created successfully', id: results.insertId });
+    }
+  );
+});
+
+app.get('/', (req, res) => {
+  res.json('Czesc');
+});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log('Server running on port', PORT));
