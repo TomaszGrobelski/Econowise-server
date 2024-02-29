@@ -23,62 +23,6 @@ db.connect(err => {
     return;
   }
   console.log('Database connected');
-
-  const createTableQuery = `
-  CREATE TABLE IF NOT EXISTS shopping_lists (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    category VARCHAR(255) NOT NULL,
-    name VARCHAR(255) NOT NULL,
-    item_name VARCHAR(255) NOT NULL,
-    quantity INT NOT NULL
-  )
-`;
-
-  db.query(createTableQuery, createTableErr => {
-    if (createTableErr) {
-      console.log(createTableErr.message);
-      return;
-    }
-    console.log('Table created or already exists');
-
-    const shoppingList = [
-      {
-        name: 'Lista spożywcza',
-
-        items: [
-          { name: 'Chleb', quantity: 2 },
-          { name: 'Mleko', quantity: 1 },
-          { name: 'Jajka', quantity: 12 },
-        ],
-      },
-      {
-        name: 'Lista chemii gospodarczej',
-        items: [
-          { name: 'Mydło', quantity: 3 },
-          { name: 'Papier toaletowy', quantity: 6 },
-          { name: 'Płyn do mycia naczyń', quantity: 1 },
-        ],
-      },
-    ];
-
-    const insertQuery = `
-    INSERT INTO shopping_lists ( name, item_name, quantity)
-    VALUES
-    ${shoppingList
-      .flatMap(list =>
-        list.items.map(item => `( "${list.name}", "${item.name}", ${item.quantity})`)
-      )
-      .join(', ')}
-  `;
-
-    db.query(insertQuery, insertErr => {
-      if (insertErr) {
-        console.log(insertErr.message);
-        return;
-      }
-      console.log('Data added to the database');
-    });
-  });
 });
 
 app.get('/shopping-list', (req, res) => {
