@@ -25,14 +25,14 @@ db.connect(err => {
   console.log('Database connected');
 
   const createTableQuery = `
-    CREATE TABLE IF NOT EXISTS shopping_lists (
-      id INT AUTO_INCREMENT PRIMARY KEY,
-      category VARCHAR(255) NOT NULL,
-      name VARCHAR(255) NOT NULL,
-      item_name VARCHAR(255) NOT NULL,
-      quantity INT NOT NULL
-    )
-  `;
+  CREATE TABLE IF NOT EXISTS shopping_lists (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    category VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    item_name VARCHAR(255) NOT NULL,
+    quantity INT NOT NULL
+  )
+`;
 
   db.query(createTableQuery, createTableErr => {
     if (createTableErr) {
@@ -44,7 +44,7 @@ db.connect(err => {
     const shoppingList = [
       {
         name: 'Lista spożywcza',
-        category: 'spoæywczne',
+
         items: [
           { name: 'Chleb', quantity: 2 },
           { name: 'Mleko', quantity: 1 },
@@ -53,7 +53,6 @@ db.connect(err => {
       },
       {
         name: 'Lista chemii gospodarczej',
-        category: 'dom i ogród',
         items: [
           { name: 'Mydło', quantity: 3 },
           { name: 'Papier toaletowy', quantity: 6 },
@@ -63,13 +62,11 @@ db.connect(err => {
     ];
 
     const insertQuery = `
-    INSERT INTO shopping_lists (name, category, item_name, quantity)
+    INSERT INTO shopping_lists ( name, item_name, quantity)
     VALUES
     ${shoppingList
       .flatMap(list =>
-        list.items.map(
-          item => `("${list.name}", "${list.category}", "${item.name}", ${item.quantity})`
-        )
+        list.items.map(item => `( "${list.name}", "${item.name}", ${item.quantity})`)
       )
       .join(', ')}
   `;
@@ -94,12 +91,6 @@ app.get('/shopping-list', (req, res) => {
     }
     res.json(results);
   });
-});
-
-app.get('/mysql-user', (req, res) => {
-  const mysqlUser = process.env.MYSQL_USER;
-  const mysqlPassword = process.env.MYSQL_PASSWORD;
-  res.json({ mysqlUser, mysqlPassword });
 });
 
 const PORT = process.env.PORT || 3000;
