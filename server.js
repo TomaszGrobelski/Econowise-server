@@ -37,5 +37,10 @@ app.get('/shopping-list', (req, res) => {
   });
 });
 
+app.get('/', (req,res)=>{
+
+  res.json("Czesc")
+})
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log('Server running on port', PORT));
