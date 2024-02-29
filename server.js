@@ -96,7 +96,8 @@ app.get('/shopping-list', (req, res) => {
 
 app.get('/mysql-user', (req, res) => {
   const mysqlUser = process.env.MYSQL_USER;
-  res.json({ mysqlUser });
+  const mysqlPassword = process.env.MYSQL_PASSWORD;
+  res.json({ mysqlUser, mysqlPassword });
 });
 
 const PORT = process.env.PORT || 3000;
