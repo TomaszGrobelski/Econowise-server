@@ -24,21 +24,21 @@ db.connect((err) => {
   }
   console.log('Database connected');
 
-  // const createTableQuery = `
-  //   CREATE TABLE IF NOT EXISTS shopping_lists (
-  //     id INT AUTO_INCREMENT PRIMARY KEY,
-  //     name VARCHAR(255) NOT NULL,
-  //     category VARCHAR(255) NOT NULL,
-  //     items JSON NOT NULL
-  //   )`;
+  const createTableQuery = `
+    CREATE TABLE IF NOT EXISTS shopping_lists (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      name VARCHAR(255) NOT NULL,
+      category VARCHAR(255) NOT NULL,
+      items JSON NOT NULL
+    )`;
 
-  // db.query(createTableQuery, (createTableErr) => {
-  //   if (createTableErr) {
-  //     console.log(createTableErr.message);
-  //     return;
-  //   }
-  //   console.log('shopping_lists table created or already exists');
-  // });
+  db.query(createTableQuery, (createTableErr) => {
+    if (createTableErr) {
+      console.log(createTableErr.message);
+      return;
+    }
+    console.log('shopping_lists table created or already exists');
+  });
 });
 
 app.get('/shopping-list', (req, res) => {
