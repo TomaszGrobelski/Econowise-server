@@ -69,8 +69,10 @@ app.post('/shopping', (req, res) => {
 });
 
 app.delete('/shopping/clear/:id', (req, res) => {
-  const { id } = req.params;
-  const deleteQuery = 'DELETE FROM shoppings WHERE id = ?';
+  // const { id } = req.params;
+  const id = req.params.id;
+  console.log('Deleting shopping list with ID:', id);
+  const deleteQuery = 'DELETE FROM shoppings WHERE id=?';
 
   db.query(deleteQuery, [id], deleteErr => {
     if (deleteErr) {
