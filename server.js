@@ -69,7 +69,6 @@ app.post('/shopping', (req, res) => {
 });
 
 app.delete('/shopping/clear/:id', (req, res) => {
-  // const { id } = req.params;
   const id = req.params.id;
   console.log('Deleting shopping list with ID:', id);
   const deleteQuery = 'DELETE FROM shoppings WHERE id=?';
@@ -84,6 +83,51 @@ app.delete('/shopping/clear/:id', (req, res) => {
     res.json({ message: `Shopping list with ID ${id} deleted successfully` });
   });
 });
+
+
+
+app.put('/shopping/item/:id', (req, res) => {
+  const id = req.params.id;
+  const { newItem } = req.body;
+  const selectQuery = 'SELECT * FROM shoppings WHERE id=?';
+
+  db.query(selectQuery, [id], (selectErr, results) => {
+    if (selectErr) {
+      console.log(selectErr.message);
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ error: `Shopping list with ID ${id} not found.` });
+    }
+
+    const shoppingList = results[0];
+    console.log(shoppingList);
+    console.log(shoppingList.items);
+    const currentItems = JSON.parse(shoppingList.items) || [];
+    console.log(currentItems);
+    console.log(newItem);
+    currentItems.push(newItem);
+
+    const updateQuery = 'UPDATE shoppings SET items=? WHERE id=?';
+    
+    db.query(updateQuery, [JSON.stringify(currentItems), id], updateErr => {
+      if (updateErr) {
+        console.log(updateErr.message);
+        return res.status(500).json({ error: 'Internal Server Error' });
+      }
+
+      res.json({ message: 'Item added to shopping list successfully', newItem, shoppingList });
+    });
+  });
+});
+
+
+
+
+
+
+
 
 app.get('/shopping/create', (req, res) => {
   const newList = {
